@@ -36,7 +36,7 @@ app.get('/todos', (req, res) => {
 app.get('/todos/:id', (req, res) => {
     var id = req.params.id
     if (!ObjectID.isValid(id)){
-        res.status(404).send({err: "Invalid Id"})
+        return res.status(404).send({err: "Invalid Id"})
     }
     Todo.findById(id).then((todo) => {
         if (!todo){
@@ -47,6 +47,21 @@ app.get('/todos/:id', (req, res) => {
         res.status(400).send({})
     })
     
+})
+
+app.delete('/todos/:id', (req, res) => {
+    var id = req.params.id
+    if (!ObjectID.isValid(id)){
+        return res.status(404).send({err: "Invalid Id"})
+    }
+    Todo.findByIdAndRemove(id).then((todo) => {
+        if (!todo){
+            return res.status(404).send({err: "Todo not found"})
+        }
+        res.send({todo})
+    }).catch((e) => {
+        res.status(400).send({})
+    })
 })
 
 app.listen(process.env.PORT || 3000, () => {
