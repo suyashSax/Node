@@ -64,8 +64,8 @@ app.delete('/todos/:id', (req, res) => {
     })
 })
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(port, () => {
     console.log(`Started on port ${port}`)
 })
 
-module.exports = {port}
+module.exports = {app}
