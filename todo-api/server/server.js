@@ -17,13 +17,10 @@ app.post('/todos/', (req, res) => {
     console.log(JSON.stringify(todo))
     
     todo.save().then((doc) => {
-        console.log("Save Response")
         res.send(doc)
         console.log("Sent Response")
     }, (e) => {
-        console.log("Err Response")
         res.status(400).send(e)
-        console.log("Sent Err")
     })
 })
 
