@@ -101,6 +101,30 @@ app.patch('/todos/:id', (req, res) => {
 })
 
 
+//app.post('/todos/', (req, res) => {
+//    var todo = new Todo({
+//        text: req.body.text
+//    })
+//    
+//    console.log(JSON.stringify(todo))
+//    
+//    todo.save().then((doc) => {
+//        res.send(doc)
+//        console.log("Sent Response")
+//    }, (e) => {
+//        res.status(400).send(e)
+//    })
+//})
+
+app.post('/users', (req, res) => {
+    var body = _.pick(req.body, ['email', 'password'])
+    var user = new User(body)
+    user.save().then((user) => {
+        res.send(user)
+    }).catch((e) => {
+        res.status(400).send(e)
+    })
+})
 
 app.listen(port, () => {
     console.log(`Started on port ${port}`)
