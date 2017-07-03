@@ -117,11 +117,29 @@ app.post('/users', (req, res) => {
 // Private route
 
 app.get('/users/me', auth, (req, res) => {
-    res.send(req.user) 
+    res.send(req.user)
 })
+
+
+app.post('/users/login', (req, res) => {
+    var body = _.pick(req.body, ['email', 'password'])
+    var user = new User(body)
+    
+    User.findByCred(body.email, body.password).then((user) => {
+        return user.generateAuthToken().then((token) => {
+            res.header('x-auth', token).send(user)    
+        })
+    }).catch((e) => {
+        res.status(400).send({})
+    })
+})
+
+
+// ****
 
 app.listen(port, () => {
     console.log(`Started on port ${port}`)
 })
 
 module.exports = {app}
+
