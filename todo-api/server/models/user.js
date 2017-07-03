@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const jwt = require('jsonwebtoken')
 const _ = require('lodash')
+const bcrypt = require('bcryptjs')
 
 mongoose.Promise = global.Promise
 
@@ -78,6 +79,26 @@ UserSchema.statics.findByToken = function(token){
         'tokens.access': 'auth'
     })
 }
+
+// mongoose middleware to auth before saves
+
+UserSchema.pre('save', function(next){
+    var user = this
+    
+    // don't want to encrypt password trice :P
+    
+    if (user.isModified('password')){
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(user.password, salt, (err, hash) => {
+                user.password = hash
+                next()
+            })
+        })
+    }
+    else{
+        next()
+    }
+})
 
 var User = mongoose.model('User', UserSchema)
 
