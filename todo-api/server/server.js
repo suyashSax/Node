@@ -8,6 +8,7 @@ const _ = require('lodash')
 var {mongoose} =  require('./db/mongoose')
 var {Todo} = require('./models/todo')
 var {User} = require('./models/user')
+var {auth} = require('./middleware/auth')
 
 var app = express()
 const port = process.env.PORT
@@ -100,22 +101,6 @@ app.patch('/todos/:id', (req, res) => {
     })
 })
 
-
-//app.post('/todos/', (req, res) => {
-//    var todo = new Todo({
-//        text: req.body.text
-//    })
-//    
-//    console.log(JSON.stringify(todo))
-//    
-//    todo.save().then((doc) => {
-//        res.send(doc)
-//        console.log("Sent Response")
-//    }, (e) => {
-//        res.status(400).send(e)
-//    })
-//})
-
 app.post('/users', (req, res) => {
     var body = _.pick(req.body, ['email', 'password'])
     var user = new User(body)
@@ -127,6 +112,12 @@ app.post('/users', (req, res) => {
     }).catch((e) => {
         res.status(400).send(e)
     })
+})
+
+// Private route
+
+app.get('/users/me', auth, (req, res) => {
+    res.send(req.user) 
 })
 
 app.listen(port, () => {
