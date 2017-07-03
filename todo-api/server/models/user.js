@@ -43,7 +43,7 @@ UserSchema.methods.toJSON = function(){
     return _.pick(userObj, ['_id', 'email'])
 }
 
-// instance method
+// instance methods
 
 UserSchema.methods.generateAuthToken = function(){
     var user = this
@@ -59,7 +59,19 @@ UserSchema.methods.generateAuthToken = function(){
     })
 }
 
-// model method
+UserSchema.methods.removeToken = function (token){
+    var user = this
+    return user.update({
+        $pull: {
+            tokens: {
+//                token: token
+                token
+            }
+        }
+    })
+} 
+
+// model methods
 
 UserSchema.statics.findByToken = function(token){
     var User = this
