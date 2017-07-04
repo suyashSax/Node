@@ -1,4 +1,4 @@
-#### A comprehensive CRUD API exploring backend development in NodeJS
+#### A comprehensive API exploring backend development in NodeJS
 
 ##### Features:
 - Public and private CRUD routes
